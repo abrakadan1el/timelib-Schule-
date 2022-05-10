@@ -145,12 +145,28 @@ int day_of_the_week(int day, int month, int year){
     return (day+=month<3?year--:year-2,23*month/9+day+4+year/4-year/100+year/400)%7;
 }
 
+
+/*
+Berechnet die Wochennummer des Datums.
+Übergabeparameter:
+day:int
+month:int
+year:int
+Rückgabewert:
+Nummer der Woche:int
+*/
+int week_of_the_year(int day, int month, int year){
+    int erg=(day_of_the_year(day,month,year)/7)+1;
+    //if(day_of_the_week(day,month,year)<day_of_the_week(31,12,year-1)) erg++;
+    return erg;
+}
+
 int main()
 {
     int year,month,day=0;
     input_date(&day,&month,&year);
     printf("Das Datum ist der %d. Tag des Jahres %d \n",day_of_the_year(day,month,year),year);
-    printf("und der %d. Tag der Woche",day_of_the_week(day,month,year));
+    printf("und der %d. Tag der %d. Woche",day_of_the_week(day,month,year),week_of_the_year(day,month,year));
     
     
     return 0;
