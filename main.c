@@ -153,8 +153,12 @@ Rückgabewert:
 Nummer der Woche:int
 */
 int week_of_the_year(int day, int month, int year){
-    int erg=(day_of_the_year(day,month,year)/7);
-    return erg;
+    int doy=day_of_the_year(day,month,year);
+    int dow=day_of_the_week(day,month,year);
+    int dowjan1=day_of_the_week(1,1,year);
+    int week=((doy+6)/7);
+    if(dow<dowjan1) week++;
+    return week;
 }
 
 int main()
