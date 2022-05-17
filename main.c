@@ -32,11 +32,11 @@ int is_leapyear(int year){
             if(year%400==0){
                 return 1;
             }
-           return 0;
+            return 0;
         }
         return 1;
     }
-    return -1;
+    return 0;
 }
 
 /*
@@ -79,7 +79,7 @@ int get_days_for_month(int month, int year){
     tage_pro_monat[1]=28;
     if((month<1 || month>12) || (year<1582 || year>2400)) return -1;
     if(is_leapyear(year)) tage_pro_monat[1]++;
-    return tage_pro_monat[month];
+    return tage_pro_monat[month-1];
 }
 
 
@@ -116,18 +116,13 @@ Nummer des Tages: int
 */
 int day_of_the_year(int day, int month, int year){
     if(!exists_date(day,month,year)) return -1;
-    int erg=0;
-    if(is_leapyear(year)){
-        tage_pro_monat[1]++;
-    }
+    int erg=1;
     if(month==1){
         return day;
     }
-    
     for (int i = 0; i <= month-1; i++) {
         erg+=get_days_for_month(i,year);
     }  
-    if(is_leapyear(year)) tage_pro_monat[1]--;
     erg+=day;
     return erg;
 }
@@ -156,8 +151,7 @@ Rückgabewert:
 Nummer der Woche:int
 */
 int week_of_the_year(int day, int month, int year){
-    int erg=(day_of_the_year(day,month,year)/7)+1;
-    //if(day_of_the_week(day,month,year)<day_of_the_week(31,12,year-1)) erg++;
+    int erg=(day_of_the_year(day,month,year)/7);
     return erg;
 }
 
