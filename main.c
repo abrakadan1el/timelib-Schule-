@@ -98,7 +98,9 @@ gültig ist
 int exists_date(int day, int month, int year){
     if (year<1582 || year>2400) return 0;
     if(month<1 || month>12) return 0;
+    if(is_leapyear(year)) tage_pro_monat[1]++;
     if(tage_pro_monat[month-1]<day || day<1) return 0;
+    tage_pro_monat[1]--;
     return 1;
 }
 
@@ -159,6 +161,10 @@ int main()
 {
     int year,month,day=0;
     input_date(&day,&month,&year);
+    if(!exists_date(day,month,year)){
+        printf("Datum existiert nicht.");
+        return 0;
+    }
     printf("Das Datum ist der %d. Tag des Jahres %d \n",day_of_the_year(day,month,year),year);
     printf("und der %d. Tag der %d. Woche",day_of_the_week(day,month,year),week_of_the_year(day,month,year));
     
