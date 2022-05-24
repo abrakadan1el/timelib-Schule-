@@ -12,6 +12,13 @@
 
 static int tage_pro_monat[12] = {31,28,31,30,31,30,31,31,30,31,30,31};
 
+
+struct date {
+    int day;
+    int month;
+    int year;
+};
+
 /*
 Die Funktion überprüft, ob ein gegebenes Jahr nach den Regeln des gregorianischen Kalender ein Schaltjahr
 ist. Bei Jahreszahlen vor dem Jahr 1582 wird ein Fehler zurückgegeben. 
@@ -95,11 +102,11 @@ Rückgabewert:
 gültig ist
 0, wenn das Datum nicht gültig ist 
 */
-int exists_date(int day, int month, int year){
-    if (year<1582 || year>2400) return 0;
-    if(month<1 || month>12) return 0;
-    if(is_leapyear(year)) tage_pro_monat[1]++;
-    if(tage_pro_monat[month-1]<day || day<1) return 0;
+int exists_date(struct date d){
+    if (d.year<1582 || d.year>2400) return 0;
+    if(d.month<1 || d.month>12) return 0;
+    if(is_leapyear(d.year)) tage_pro_monat[1]++;
+    if(tage_pro_monat[d.month-1]<d.day || d.day<1) return 0;
     tage_pro_monat[1]--;
     return 1;
 }
@@ -116,16 +123,16 @@ year: int
 Rückgabewert:
 Nummer des Tages: int
 */
-int day_of_the_year(int day, int month, int year){
-    if(!exists_date(day,month,year)) return -1;
+int day_of_the_year(struct date d){
+    if(!exists_date(d)) return -1;
     int erg=1;
-    if(month==1){
-        return day;
+    if(d.month==1){
+        return d.day;
     }
-    for (int i = 0; i <= month-1; i++) {
-        erg+=get_days_for_month(i,year);
+    for (int i = 0; i <= d.month-1; i++) {
+        erg+=get_days_for_month(i,d.year);
     }  
-    erg+=day;
+    erg+=d.day;
     return erg;
 }
 
@@ -138,8 +145,8 @@ year:int
 Rückgabewert:
 Tag der Woche:int
 */
-int day_of_the_week(int day, int month, int year){
-    return (day+=month<3?year--:year-2,23*month/9+day+4+year/4-year/100+year/400)%7;
+int day_of_the_week(struct date d){
+    return (d.day+=d.month<3?d.year--:d.year-2,23*d.month/9+d.day+4+d.year/4-d.year/100+d.year/400)%7;
 }
 
 
@@ -152,10 +159,12 @@ year:int
 Rückgabewert:
 Nummer der Woche:int
 */
-int week_of_the_year(int day, int month, int year){
-    int doy=day_of_the_year(day,month,year);
-    int dow=day_of_the_week(day,month,year);
-    int dowjan1=day_of_the_week(1,1,year);
+int week_of_the_year(struct date d){
+    int doy=day_of_the_year(d);
+    int dow=day_of_the_week(d);
+    d.day=1;
+    d.month=1;
+    int dowjan1=day_of_the_week(d);
     int week=((doy+6)/7);
     if(dow<dowjan1) week++;
     return week;
@@ -163,14 +172,14 @@ int week_of_the_year(int day, int month, int year){
 
 int main()
 {
-    int year,month,day=0;
-    input_date(&day,&month,&year);
-    if(!exists_date(day,month,year)){
+    struct date d;
+    input_date(&d.day,&d.month,&d.year);
+    if(!exists_date(d)){
         printf("Datum existiert nicht.");
         return 0;
     }
-    printf("Das Datum ist der %d. Tag des Jahres %d \n",day_of_the_year(day,month,year),year);
-    printf("und der %d. Tag der %d. Woche",day_of_the_week(day,month,year),week_of_the_year(day,month,year));
+    printf("Das Datum ist der %d. Tag des Jahres %d \n",day_of_the_year(d),d.year);
+    printf("und der %d. Tag der %d. Woche",day_of_the_week(d),week_of_the_year(d));
     
     
     return 0;
