@@ -13,6 +13,12 @@
 static int tage_pro_monat[12] = {31,28,31,30,31,30,31,31,30,31,30,31};
 
 
+struct date {
+    int day;
+    int month;
+    int year;
+};
+
 /*
 Die Funktion überprüft, ob ein gegebenes Jahr nach den Regeln des gregorianischen Kalender ein Schaltjahr
 ist. Bei Jahreszahlen vor dem Jahr 1582 wird ein Fehler zurückgegeben. 
